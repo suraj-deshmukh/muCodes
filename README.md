@@ -1,1 +1,2 @@
-# muCodes
+# myCodes
+practice codes
