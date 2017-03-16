@@ -20,8 +20,8 @@ observeEvent(input$file,{
 output$model_results<-renderDataTable({
 if(is.null(input$file)) { return(NULL) }
 df = get("data", envir = e)
-y = as.factor(df[,ncol(df)])  #assuming last column as target variable
-x = as.matrix(df[,1:ncol(df)-1])
+y <<- as.factor(df[,ncol(df)])  #assuming last column as target variable
+x <<- as.matrix(df[,1:ncol(df)-1])
 get_results()
 })
 
