@@ -8,8 +8,7 @@ switch(input$class_algo,
                     numericInput("degree","Degree",value=3,step=0.5),
                     numericInput("coef0","Coef",value=0,step=0.5)
                    ),
-    "c_rf"  = box(width=15,background = "blue",title="Algorithm Parameters",numericInput("ntree","No of trees",value=500,step=1)),
-    "c_knn" = box(width=15,background = "blue",title="Algorithm Parameters",numericInput("k", "K",value = 3,step=2))
+    "c_rf"  = box(width=15,background = "blue",title="Algorithm Parameters",numericInput("ntree","No of trees",value=500,step=1))
 )
 })
 
@@ -22,13 +21,13 @@ if(is.null(input$file)) { return(NULL) }
 df = get("data", envir = e)
 y <<- as.factor(df[,ncol(df)])  #assuming last column as target variable
 x <<- as.matrix(df[,1:ncol(df)-1])
-get_results()
+
+result <- eventReactive(input$create_model,{
+get_results(input)
 })
 
-output$cross_or_split<-renderText({
-if(is.null(input$file)) { return(NULL) }
-if(input$cv>1){"Cross Validation Results"}
-else{"Test Set Results"}
+#result = get_results(input)
+return(result())
 })
 
 observeEvent(input$data,{
