@@ -22,12 +22,33 @@ df = get("data", envir = e)
 y <<- as.factor(df[,ncol(df)])  #assuming last column as target variable
 x <<- as.matrix(df[,1:ncol(df)-1])
 
-result <- eventReactive(input$create_model,{
-get_results(input)
+output = result()
+return(output)
 })
 
-#result = get_results(input)
-return(result())
+notify_modal<-function(msg){
+    showModal(
+        modalDialog(
+            msg,easyClose = TRUE
+        )
+    )
+}
+
+observeEvent(input$create_model,{
+    notify_modal("Gathering Input parameters And Data")
+    Sys.sleep(2)
+    notify_modal("Generating Model")
+    Sys.sleep(2)
+    out <<- get_results(input)
+    if(is.data.frame(out)){
+        notify_modal("Done")
+    }
+}
+    
+)
+
+result <- eventReactive(input$create_model,{
+    return(out)
 })
 
 observeEvent(input$data,{
