@@ -35,6 +35,7 @@ notify_modal<-function(msg){
 }
 
 observeEvent(input$create_model,{
+    if(is.null(input$file)){return(NULL)}
     notify_modal("Gathering Input parameters And Data")
     Sys.sleep(2)
     notify_modal("Generating Model")
@@ -43,11 +44,16 @@ observeEvent(input$create_model,{
     if(is.data.frame(out)){
         notify_modal("Done")
     }
-}
-    
+}   
 )
 
 result <- eventReactive(input$create_model,{
+    if(input$cv>1){
+        output$cv_or_split<-renderText({"Crossvalidation Results"})
+    }
+    else{
+        output$cv_or_split<-renderText({"Test Set Result"})
+    }
     return(out)
 })
 
