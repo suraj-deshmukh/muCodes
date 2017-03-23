@@ -1,17 +1,17 @@
 dynamic_ui <- fluidRow(
-        box(background = "blue",width=5,selectInput("class_algo",'Algorithm List',choices=c("Support Vector Machine"="c_svm","Random Forest"="c_rf")),numericInput("cv","Cross Validation",value=1,step=1),sliderInput("split","Train Size",min=0.0,max=1.0,value=0.8)),
+        box(background = "blue",width=5,selectInput("class_algo",'Algorithm List',choices=c("Support Vector Machine"="c_svm","Random Forest"="c_rf","Naive Bayes"="c_nb")),numericInput("cv","Cross Validation",value=1,step=1),sliderInput("split","Train Size",min=0.0,max=1.0,value=0.8)),
         column(width=5,uiOutput("ui_class"))
     )
 
 header <- dashboardHeader(title="MlR")
 
-body <- dashboardBody(
+body <- dashboardBody(div(style="min-height: 650px;",
     mainPanel(
         tabsetPanel(
             tabPanel("Classification",dynamic_ui,id="class"),
-            tabPanel("Model Results",dataTableOutput("model_results"))
+            tabPanel("Model Results",textOutput("cv_or_split"),dataTableOutput("model_results"),textOutput("confusion_matrix"),dataTableOutput("model_results2"))
         )
-    )
+    ))
 )
 
 sidebar <- dashboardSidebar(
