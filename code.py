@@ -4,16 +4,18 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.optimizers import SGD
 import numpy as np
 import cv2
+from keras import backend as K
+K.set_image_dim_ordering('th')
 
 model = Sequential()
-model.add(Convolution2D(32, 3, 3, border_mode='same',input_shape=(3 , 100, 100)))
+model.add(Convolution2D(32, kernel_size=(3, 3),padding='same',input_shape=(3 , 100, 100)))
 model.add(Activation('relu'))
-model.add(Convolution2D(32, 3, 3))
+model.add(Convolution2D(64, (3, 3)))
 model.add(Activation('relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 
-model.add(Convolution2D(64, 3, 3, border_mode='same'))
+model.add(Convolution2D(64,(3, 3), padding='same'))
 model.add(Activation('relu'))
 model.add(Convolution2D(64, 3, 3))
 model.add(Activation('relu'))
@@ -29,7 +31,7 @@ model.add(Activation('sigmoid'))
 
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
-model.load_weights("/home/suraj/Documents/multi-label-image-classification/cnn_multi_label_working_model/weights.hdf5")
+model.load_weights("weights.hdf5")
 
 classes = ['desert','mountains','water','sunset','trees']
 threshold = np.array([0.6,  0.3,  0.4,  0.3,  0.7])
