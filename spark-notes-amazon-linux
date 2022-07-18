@@ -1,0 +1,51 @@
+master/standalon setup:
+
+
+sudo yum update -y
+sudo yum install java-1.8.0-openjdk -y
+echo "export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk" >> ~/.bashrc
+source ~/.bashrc
+pip3 install pip -U
+wget https://dlcdn.apache.org/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
+tar -xvf spark-3.3.0-bin-hadoop3.tgz 
+cd spark-3.3.0-bin-hadoop3/
+./sbin/start-master.sh
+pip install pyspark ipython 
+
+
+worker setup:
+sudo yum update -y
+sudo yum install java-1.8.0-openjdk -y
+echo "export JAVA_HOME=/usr/lib/jvm/jre-1.8.0-openjdk" >> ~/.bashrc
+source ~/.bashrc
+pip3 install pip -U
+wget https://dlcdn.apache.org/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
+tar -xvf spark-3.3.0-bin-hadoop3.tgz 
+cd spark-3.3.0-bin-hadoop3/
+./sbin/start-worker.sh spark://ip-172-31-2-244.eu-west-1.compute.internal:7077
+pip install pyspark ipython
+
+
+webui: master_ip:8080
+worker: worker_ip:4041
+
+from pyspark.sql import SparkSession
+
+# Create SparkSession 
+spark = SparkSession.builder \
+      .master("spark://ip-172-31-3-60.eu-west-1.compute.internal:7077") \
+      .appName("SparkByExamples.com") \
+      .getOrCreate()
+
+
+
+for efs:
+select those vpc, subnets and security groups from which ec2 instances will be launched.
+
+follow this link for creating efs: https://linuxhint.com/mount-efs-ec2-instances/
+other links: https://computingforgeeks.com/mount-aws-efs-file-system-on-ec2/, https://medium.com/devops-cloud-it-career/create-an-amazon-efs-file-system-and-mount-to-an-ec2-instance-a1bb3c341914
+
+efs mount steps:
+1. install "sudo yum install -y amazon-efs-utils" on servers where efs needs to mount
+2. go to efs console and select efs system
+3. click on attach and copy commands and run that command on all server
